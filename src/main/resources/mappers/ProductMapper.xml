@@ -8,42 +8,22 @@
       <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="subtitle" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="main_image" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sub_image" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="detail" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
       <arg column="stock" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-    </constructor>
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.njusc.pojo.Product" >
-    <constructor >
-      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="category_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="subtitle" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="main_image" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="detail" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
-      <arg column="stock" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="sub_image" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, category_id, name, subtitle, main_image, detail, price, stock, status, create_time, 
-    update_time
+    id, category_id, name, subtitle, main_image, sub_image, detail, price, stock, status, 
+    create_time, update_time
   </sql>
-  <sql id="Blob_Column_List" >
-    sub_image
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from mmall_product
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -53,14 +33,14 @@
   </delete>
   <insert id="insert" parameterType="com.njusc.pojo.Product" >
     insert into mmall_product (id, category_id, name, 
-      subtitle, main_image, detail, 
-      price, stock, status, 
-      create_time, update_time, sub_image
+      subtitle, main_image, sub_image, 
+      detail, price, stock, 
+      status, create_time, update_time
       )
     values (#{id,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{subtitle,jdbcType=VARCHAR}, #{mainImage,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, 
-      #{price,jdbcType=DECIMAL}, #{stock,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{subImage,jdbcType=LONGVARCHAR}
+      #{subtitle,jdbcType=VARCHAR}, #{mainImage,jdbcType=VARCHAR}, #{subImage,jdbcType=VARCHAR}, 
+      #{detail,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{stock,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, now(), now()
       )
   </insert>
   <insert id="insertSelective" parameterType="com.njusc.pojo.Product" >
@@ -81,6 +61,9 @@
       <if test="mainImage != null" >
         main_image,
       </if>
+      <if test="subImage != null" >
+        sub_image,
+      </if>
       <if test="detail != null" >
         detail,
       </if>
@@ -99,9 +82,6 @@
       <if test="updateTime != null" >
         update_time,
       </if>
-      <if test="subImage != null" >
-        sub_image,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -119,6 +99,9 @@
       <if test="mainImage != null" >
         #{mainImage,jdbcType=VARCHAR},
       </if>
+      <if test="subImage != null" >
+        #{subImage,jdbcType=VARCHAR},
+      </if>
       <if test="detail != null" >
         #{detail,jdbcType=VARCHAR},
       </if>
@@ -132,13 +115,10 @@
         #{status,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
+        now(),
       </if>
       <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="subImage != null" >
-        #{subImage,jdbcType=LONGVARCHAR},
+        now(),
       </if>
     </trim>
   </insert>
@@ -157,6 +137,9 @@
       <if test="mainImage != null" >
         main_image = #{mainImage,jdbcType=VARCHAR},
       </if>
+      <if test="subImage != null" >
+        sub_image = #{subImage,jdbcType=VARCHAR},
+      </if>
       <if test="detail != null" >
         detail = #{detail,jdbcType=VARCHAR},
       </if>
@@ -173,27 +156,9 @@
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="subImage != null" >
-        sub_image = #{subImage,jdbcType=LONGVARCHAR},
+        update_time = now(),
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.njusc.pojo.Product" >
-    update mmall_product
-    set category_id = #{categoryId,jdbcType=INTEGER},
-      name = #{name,jdbcType=VARCHAR},
-      subtitle = #{subtitle,jdbcType=VARCHAR},
-      main_image = #{mainImage,jdbcType=VARCHAR},
-      detail = #{detail,jdbcType=VARCHAR},
-      price = #{price,jdbcType=DECIMAL},
-      stock = #{stock,jdbcType=INTEGER},
-      status = #{status,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      sub_image = #{subImage,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.njusc.pojo.Product" >
@@ -202,12 +167,13 @@
       name = #{name,jdbcType=VARCHAR},
       subtitle = #{subtitle,jdbcType=VARCHAR},
       main_image = #{mainImage,jdbcType=VARCHAR},
+      sub_image = #{subImage,jdbcType=VARCHAR},
       detail = #{detail,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
       stock = #{stock,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

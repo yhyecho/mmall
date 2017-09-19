@@ -14,6 +14,8 @@ public class Product {
 
     private String mainImage;
 
+    private String subImage;
+
     private String detail;
 
     private BigDecimal price;
@@ -26,21 +28,19 @@ public class Product {
 
     private Date updateTime;
 
-    private String subImage;
-
-    public Product(Integer id, Integer categoryId, String name, String subtitle, String mainImage, String detail, BigDecimal price, Integer stock, Integer status, Date createTime, Date updateTime, String subImage) {
+    public Product(Integer id, Integer categoryId, String name, String subtitle, String mainImage, String subImage, String detail, BigDecimal price, Integer stock, Integer status, Date createTime, Date updateTime) {
         this.id = id;
         this.categoryId = categoryId;
         this.name = name;
         this.subtitle = subtitle;
         this.mainImage = mainImage;
+        this.subImage = subImage;
         this.detail = detail;
         this.price = price;
         this.stock = stock;
         this.status = status;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.subImage = subImage;
     }
 
     public Product() {
@@ -85,6 +85,14 @@ public class Product {
 
     public void setMainImage(String mainImage) {
         this.mainImage = mainImage == null ? null : mainImage.trim();
+    }
+
+    public String getSubImage() {
+        return subImage;
+    }
+
+    public void setSubImage(String subImage) {
+        this.subImage = subImage == null ? null : subImage.trim();
     }
 
     public String getDetail() {
@@ -133,13 +141,5 @@ public class Product {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public String getSubImage() {
-        return subImage;
-    }
-
-    public void setSubImage(String subImage) {
-        this.subImage = subImage == null ? null : subImage.trim();
     }
 }

@@ -19,7 +19,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-servlet-api</artifactId>
@@ -55,7 +54,6 @@
             <artifactId>spring-test</artifactId>
             <version>${org.springframework.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -189,7 +187,6 @@
             <version>0.9.4</version>
         </dependency>
 
-
         <!-- alipay -->
         <dependency>
             <groupId>commons-codec</groupId>
@@ -234,7 +231,7 @@
         </dependency>
     </dependencies>
 
-
+    <!-- 构建所需依赖 -->
     <build>
         <finalName>mmall</finalName>
         <plugins>
